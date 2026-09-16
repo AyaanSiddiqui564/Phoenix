@@ -144,12 +144,37 @@ export const getThreats = async (params = {}) => {
   return withListMeta(payload, ["threats"]);
 };
 
+export const getThreat = async (threatId, { signal } = {}) => {
+  const payload = await apiRequest(
+    `/api/users/threats/${encodeURIComponent(threatId)}`,
+    {
+      requiresAuth: true,
+      signal,
+    },
+  );
+
+  return payload?.threat || null;
+};
+
 export const getHazards = async (params = {}) => {
   const payload = await apiRequest(`/api/users/hazards${toQueryString(params)}`, {
     requiresAuth: true,
   });
 
   return withListMeta(payload, ["hazards"]);
+};
+
+// Fetch a single hazard by id.
+// Path assumed to follow the list route — confirm with the backend team.
+export const getHazardById = async (hazardId) => {
+  const payload = await apiRequest(
+    `/api/users/hazards/${encodeURIComponent(hazardId)}`,
+    {
+      requiresAuth: true,
+    },
+  );
+
+  return unwrapData(payload);
 };
 
 export const getLocations = async () => {
